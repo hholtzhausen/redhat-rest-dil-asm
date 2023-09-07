@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${project.artifactId}
+  labels:
+    app.kubernetes.io/name: ${k8s-name}
+    app.kubernetes.io/instance: ${project.artifactId}
+    app.kubernetes.io/component: ${k8s-component}
+    app.kubernetes.io/version: "${project.version}"
+    app.kubernetes.io/part-of: ${project.parent.artifactId}
+data:
+  JAVA_OPTIONS: "-Djava.util.logging.manager=org.jboss.logmanager.LogManager -XshowSettings:vm ${k8s-env-java-options}"
+

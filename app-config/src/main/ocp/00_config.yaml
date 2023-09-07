@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${project.parent.artifactId}
+  labels:
+    app.kubernetes.io/name: ${k8s-name}
+    app.kubernetes.io/instance: ${project.parent.artifactId}
+    app.kubernetes.io/component: ${k8s-component}
+    app.kubernetes.io/version: "${project.version}"
+    app.kubernetes.io/part-of: ${project.parent.artifactId}
+data:
+  QUARKUS_PROFILE: ${quarkus-profile}
+  QUARKUS_LOG_HANDLER_GELF_ENABLED: "${gelf-enable}"
+  QUARKUS_LOG_HANDLER_GELF_HOST: ${gelf-host}
+  QUARKUS_LOG_HANDLER_GELF_PORT: "${gelf-port}"

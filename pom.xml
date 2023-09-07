@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.acme.pod</groupId>
+  <artifactId>acme-person-asm</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <parent>
+    <groupId>io.bitbuild.poms</groupId>
+    <artifactId>ocp4-deployment-parent</artifactId>
+    <version>1.1-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+<!-- labels and annotations -->
+    <k8s-name>bitbuild-fitcamel</k8s-name>
+    <k8s-component>integration</k8s-component>
+    <ocp-runtime>quarkus</ocp-runtime>
+
+<!-- pod template, service and route -->
+    <k8s-replicas>1</k8s-replicas>
+    <k8s-containerPort>8080</k8s-containerPort>
+    <k8s-svcProtocol>TCP</k8s-svcProtocol>
+    <k8s-probe-failureThreshold>3</k8s-probe-failureThreshold>
+    <k8s-probe-initialDelaySeconds>15</k8s-probe-initialDelaySeconds>
+    <k8s-probe-periodSeconds>10</k8s-probe-periodSeconds>
+    <k8s-probe-successThreshold>1</k8s-probe-successThreshold>
+    <k8s-probe-timeoutSeconds>1</k8s-probe-timeoutSeconds>
+    <k8s-probe-scheme>HTTP</k8s-probe-scheme>
+    <k8s-probe-livenessPath>/q/health/live</k8s-probe-livenessPath>
+    <k8s-probe-livenessPort>${k8s-containerPort}</k8s-probe-livenessPort>
+    <k8s-probe-readinessPath>/q/health/ready</k8s-probe-readinessPath>
+    <k8s-probe-readinessPort>${k8s-containerPort}</k8s-probe-readinessPort>
+
+<!-- Graylog -->
+    <gelf-host>tcp:graylog.graylog-system.svc</gelf-host>
+    <gelf-port>12201</gelf-port>
+    <gelf-enable>false</gelf-enable>
+    <gelf-mdc>-Dquarkus.log.handler.gelf.include-full-mdc=true</gelf-mdc>
+    <gelf-env>-Dquarkus.log.handler.gelf.additional-field.environment.value=${environment}</gelf-env>
+    <gelf-name>-Dquarkus.log.handler.gelf.additional-field.name.value=${k8s-name}</gelf-name>
+    <gelf-comp>-Dquarkus.log.handler.gelf.additional-field.component.value=${k8s-component}</gelf-comp>
+    <gelf-version>-Dquarkus.log.handler.gelf.additional-field.version.value=${project.version}</gelf-version>
+    <gelf-partof>-Dquarkus.log.handler.gelf.additional-field.partof.value=${project.parent.artifactId}</gelf-partof>
+
+    <k8s-env-java-options>${gelf-mdc} ${gelf-env} ${gelf-name} ${gelf-comp} ${gelf-version} ${gelf-partof}</k8s-env-java-options>
+  </properties>
+
+  <modules>
+    <module>app-config</module>
+    <module>acme-person</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>test</id>
+      <properties>
+        <oc-api>https://cluster-kmx59-65zq9-int-11821daa41b7d7c7.elb.us-east-2.amazonaws.com:6443</oc-api>
+        <oc-namespace>middleware</oc-namespace>
+        <oc-insecure-skip-tls-verify>true</oc-insecure-skip-tls-verify>
+        <quarkus-profile>test</quarkus-profile>
+        <environment>test</environment>
+      </properties>
+    </profile>
+  </profiles>
+</project>

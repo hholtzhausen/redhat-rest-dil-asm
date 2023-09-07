@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>acme-contacts-asm-app-config</artifactId>
+  <packaging>jar</packaging>
+
+  <!--testing-->
+  <parent>
+    <groupId>org.acme.pod</groupId>
+    <artifactId>acme-contacts-asm</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <build>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>ocp-deployment</id>
+      <properties>
+        <ocp-connects-to></ocp-connects-to>
+        <ocp.oc-token>${oc-token}</ocp.oc-token>
+        <ocp.oc-insecure-skip-tls-verify>${oc-insecure-skip-tls-verify}</ocp.oc-insecure-skip-tls-verify>
+        <ocp.oc-api>${oc-api}</ocp.oc-api>
+        <ocp.oc-namespace>${oc-namespace}</ocp.oc-namespace>
+        <ocp.deployment-selector>app.kubernetes.io/instance=${project.parent.artifactId},app.kubernetes.io/part-of=${project.parent.artifactId}</ocp.deployment-selector>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/ocp</directory>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
