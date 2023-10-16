@@ -63,7 +63,7 @@
 <!--
         <oc-api>https://api-int.crc.testing:6443</oc-api>
 -->
-        <oc-api>https://cluster-kmx59-65zq9-int-11821daa41b7d7c7.elb.us-east-2.amazonaws.com:6443</oc-api>
+        <oc-api>https://cluster-gq4pl-x6lmz-int-4dfa6462e2e78f76.elb.us-east-2.amazonaws.com:6443</oc-api>
         <oc-namespace>middleware</oc-namespace>
         <oc-insecure-skip-tls-verify>true</oc-insecure-skip-tls-verify>
         <quarkus-profile>test</quarkus-profile>
